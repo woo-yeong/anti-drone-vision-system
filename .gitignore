@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+
+# Virtual Environment
+venv/
+env/
+
+# YOLO models (용량 큼!)
+*.pt
+*.engine
+*.onnx
+*.tflite
+*.torchscript
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Large files
+*.mp4
+*.avi
+*.mov
+
+# Temporary
+*.log
+*.tmp
+/tmp/
+
+# Weights & checkpoints
+runs/
+weights/
+checkpoints/

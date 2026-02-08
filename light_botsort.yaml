@@ -1,0 +1,15 @@
+tracker_type: botsort
+
+# Tracking 파라미터
+track_high_thresh: 0.5
+track_low_thresh: 0.1
+new_track_thresh: 0.6
+track_buffer: 30
+match_thresh: 0.8
+
+# ✅ 성능 최적화 - 핵심!
+with_reid: False        # ReID 완전히 끄기
+cmc_method: none        # CMC 완전히 끄기
+
+proximity_thresh: 0.5
+appearance_thresh: 0.25
