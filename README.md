@@ -1,42 +1,58 @@
-# IP 주소 확인 (코드 수정 필수)
-ifconfig
+# Edge-AI Drone Detection & Tracking
 
-# GUI 연결
-PBL 디렉토리 이동 후 
-python3 stream.py
+Edge-AI 기반 안티드론 UGV 프로젝트에서 사용한 Jetson 기반 드론 탐지·추적 소프트웨어 코드입니다.
 
-Loading /home/wooyeong/PBL/yolo/best2.engine for TensorRT inference...
-[02/08/2026-15:17:14] [TRT] [I] Loaded engine size: 8 MiB
-[02/08/2026-15:17:14] [TRT] [W] Using an engine plan file across different models of devices is not recommended and is likely to affect performance or even cause errors.
-[02/08/2026-15:17:14] [TRT] [I] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +9, now: CPU 0, GPU 14 (MiB)
+## 주요 기능
 
-위의 로그가 떠야 정상
+- YOLO 기반 드론 객체 탐지
+- TensorRT 및 PyTorch 기반 추론 실행
+- DeepSORT·ByteTrack 기반 객체 추적
+- GStreamer 기반 CSI/USB 카메라 입력 처리
+- WebSocket·TCP·UDP 기반 영상 및 탐지 결과 전송
+- 탐지 객체 중심 좌표를 FIFO로 전달해 후단 제어 시스템과 연동
+- Node.js 기반 WebSocket 중계 서버
 
-# GUI 연결 안될 때
-# 카메라 연결 확인
-ls /dev/viedo*
--> /dev/video1 부터 /dev/video3까지 뜸
-아무것도 안 뜨면 재부팅
+## 디렉터리 구성
 
-# 터미널 내 카메라 확인
-nvgstcapture-1.0 
-안되면 아래 명령 실행 후 다시 
-sudo systemctl restart nvargus-daemon
+```text
+.
+├── src/
+│   ├── tensorrt_bytetrack_websocket.py
+│   ├── tensorrt_deepsort_websocket.py
+│   ├── tensorrt_deepsort_tcp.py
+│   ├── tensorrt_detection_tcp.py
+│   └── pytorch_detection_udp.py
+├── training/
+│   └── train_yolo11.py
+├── configs/
+│   └── botsort_lightweight.yaml
+├── websocket_server/
+│   ├── server.js
+│   ├── package.json
+│   └── package-lock.json
+└── README.md
+```
 
-# camera generated 관련 ERROR 뜰 때
-sudo systemctl restart nvargus-daemon
-혹은
-sudo pkill nvargus-daemon
-sudo systemctl start nvargus-daemon
+## 파일 설명
 
-그래도 안되면 재부팅
+- `tensorrt_bytetrack_websocket.py` : TensorRT YOLO 추론과 ByteTrack 추적, WebSocket 영상 전송 및 좌표 출력
+- `tensorrt_deepsort_websocket.py` : TensorRT YOLO 추론과 DeepSORT 추적, WebSocket 영상 전송 및 좌표 출력
+- `tensorrt_deepsort_tcp.py` : TensorRT YOLO + DeepSORT 결과를 TCP로 전송하는 실험 코드
+- `tensorrt_detection_tcp.py` : TensorRT 기반 YOLO 탐지 결과와 영상을 TCP로 전송하는 코드
+- `pytorch_detection_udp.py` : PyTorch 기반 YOLO 탐지 결과와 영상을 UDP로 전송하는 비교 코드
+- `train_yolo11.py` : YOLO11 객체 탐지 모델 학습 코드
+- `botsort_lightweight.yaml` : ReID·CMC를 비활성화한 경량 BoT-SORT 설정
+- `websocket_server/` : WebSocket 메시지 중계 서버
 
+## 개발 환경
 
+- NVIDIA Jetson Orin Nano
+- Python
+- OpenCV
+- Ultralytics YOLO
+- TensorRT
+- GStreamer
+- DeepSORT / ByteTrack
+- WebSocket / TCP / UDP
 
-[gimbal] Opening FIFO (waiting for C program)...
-[gimbal] FIFO error: [Errno 13] Permission denied: '/tmp/drone_coords'
-
--> sudo chmod 666 /tmp/drone_coords
-
-
-# PBL
+> 모델 가중치와 장치별 경로·네트워크 설정은 실행 환경에 맞게 별도로 구성해야 합니다.

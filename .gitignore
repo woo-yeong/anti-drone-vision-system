@@ -10,12 +10,16 @@ __pycache__/
 venv/
 env/
 
-# YOLO models (용량 큼!)
+# YOLO models
 *.pt
 *.engine
 *.onnx
 *.tflite
 *.torchscript
+
+# Node.js
+node_modules/
+.env
 
 # IDE
 .vscode/
@@ -25,7 +29,7 @@ env/
 .DS_Store
 Thumbs.db
 
-# Large files
+# Large media files
 *.mp4
 *.avi
 *.mov
